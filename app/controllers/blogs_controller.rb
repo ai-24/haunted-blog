@@ -45,7 +45,11 @@ class BlogsController < ApplicationController
   private
 
   def set_blog
-    @blog = Blog.find(params[:id])
+    @blog = if Blog.find(params[:id]).secret
+              current_user.blogs.find(params[:id])
+            else
+              Blog.find(params[:id])
+            end
   end
 
   def manage_blog
