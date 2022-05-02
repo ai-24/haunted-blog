@@ -15,6 +15,14 @@ class Blog < ApplicationRecord
 
   scope :default_order, -> { order(id: :desc) }
 
+  scope :authorized_blogs, lambda { |user|
+    if user
+      where('secret = TRUE and user_id = ?', user.id).or(where('secret = FALSE'))
+    else
+      published
+    end
+  }
+
   def owned_by?(target_user)
     user == target_user
   end
