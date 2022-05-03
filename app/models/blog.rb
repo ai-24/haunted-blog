@@ -17,7 +17,7 @@ class Blog < ApplicationRecord
 
   scope :authorized_blogs, lambda { |user|
     if user
-      where('secret = TRUE and user_id = ?', user.id).or(where('secret = FALSE'))
+      where(user: user).or(published)
     else
       published
     end
